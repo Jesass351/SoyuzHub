@@ -1,6 +1,6 @@
-# AssettoHub
+# SoyuzHub
 [Сайт на хостинге моего ВУЗа](http://assettohub.std-2033.ist.mospolytech.ru/)
-## Маленький портальчик для обмена сетапами игры Assetto Corsa Competizione
+## Маленький портальчик для обмена сетапами на машины внутри развивающейся команды по симрейсингу "SOYUZ SimRacing Team" в игре Assetto Corsa Competizione
 
 # При создании использовалось:
 - ### Flask
