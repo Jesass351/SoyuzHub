@@ -164,14 +164,14 @@ def create():
 @bp.route('/delete/<int:setupID>', methods=['POST'])
 @login_required
 def delete_post(setupID):
-    try:
+#    try:
         setup = db.session.execute(db.select(Setup).filter_by(id = setupID)).scalar()
         if not user_is_author(setup):
             flash('Недостаточно прав для выполнения данного действия', 'warning')
             return redirect(url_for('index'))
         if Setup.query.filter_by(file_id=setup.file_id).count() == 1:
             file = db.session.execute(db.select(SetupFile).filter_by(id = setup.file_id)).scalar()
-            os.remove(f'media/files/{setup.file_id}.json')
+            os.remove(os.path.join(app.config['SETUPS_UPLOAD_FOLDER'], setup.file_id + '.json'))
             db.session.query(SetupFile).filter_by(id = setup.file_id).delete()
 
         db.session.query(Setup).filter_by(id = setupID).delete()
@@ -180,15 +180,15 @@ def delete_post(setupID):
         db.session.commit()
         flash('Запись успешно удалена', 'success')
         return redirect(url_for('user.profile'))
-    except:
-        db.session.rollback()
-        flash('Ошибка при удалении', 'danger')
-        return redirect(url_for('index'))
+#    except:
+ #       db.session.rollback()
+  #      flash('Ошибка при удалении', 'danger')
+   #     return redirect(url_for('index'))
 
 @bp.route('/create_post', methods=['POST'])
 @login_required
 def create_post():
-    try:
+#    try:
         f = request.files.get('setup_file')
     
         if f and f.filename:
@@ -212,10 +212,10 @@ def create_post():
         db.session.commit()
         flash(f'Настройка была успешно добавлена', 'success')
         return redirect(url_for('index'))
-    except:
-        db.session.rollback()
-        flash('Ошибка при добавлении','danger')
-        return redirect(url_for('index'))
+#    except:
+ #       db.session.rollback()
+  #      flash('Ошибка при добавлении','danger')
+   #     return redirect(url_for('index'))
         
 @bp.route('like/<int:setupID>')
 def like(setupID):
