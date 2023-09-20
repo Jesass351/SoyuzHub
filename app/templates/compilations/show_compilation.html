@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% from 'show_book_macro.html' import show_book with context %}
+
+{% block content %}
+<div class="container">
+  <h1 class="text-center">Книги из подборки </h1>
+        {% if books %}
+            {% for book in books %}
+              {{ show_book(book, True, True) }}
+            {% endfor %}
+        {% endif %}
+</div>
+{% endblock %}

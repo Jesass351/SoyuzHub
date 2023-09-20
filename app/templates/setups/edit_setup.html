@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% from 'add_edit_macro.html' import add_edit_form with context %}
+
+{% block extra_head %} 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+{% endblock %}
+{% block content %}
+{{ add_edit_form(setup, True) }}
+
+{% endblock %}
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='EasyMDE.js')}}"></script>
+
+{% endblock %}

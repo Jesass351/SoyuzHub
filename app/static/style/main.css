@@ -1,0 +1,137 @@
+.setup-carname {
+    position: absolute;
+    bottom: 50px;
+    left: 20px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.setup-trackname {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.setup-likes{
+    position: absolute;
+    bottom: 50px;
+    right: 20px;
+    font-size: 20px;
+}
+
+.setup-downloads{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 20px;
+}
+
+.setup-created-at {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 17px;
+    color: rgb(168, 168, 168);
+}
+
+.setup-card {
+    height: 250px;
+    background-size: cover !important;
+    color: white;
+    position: relative;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+
+  .setup-header {
+    height: 250px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    background-size: cover !important;
+    color: white;
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    position: absolute;
+    left: 10px;
+    bottom: 65px;
+    font-size: 23px;
+    font-weight: bold;
+  }
+
+  .card-likes {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+
+  .card-downloads {
+    position: absolute;
+    right: 10px;
+    top: 35px;
+  }
+
+  .card-carname {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .card-trackname {
+    position: absolute;
+    top: 35px;
+    left: 10px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .card-time {
+    position: absolute;
+    bottom: 17px;
+    left: 10px;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  .card-created-at{
+    position: absolute;
+    bottom: 17px;
+    right: 10px;
+    font-size: 15px;
+    color: grey;
+  }
+
+  .card-author {
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+    text-align: end;
+  }
+  .card-link {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index:2;
+    background: black;
+    opacity: 0;
+    text-decoration: none;
+    text-align: center;
+  }
+  .card-link:hover{
+    opacity: 0.3;
+  }
+
+  .alerts{
+    position: fixed;
+    bottom: 0;
+  }
+
+  .filter-apply-btn{
+    position: absolute;
+    bottom: 0;
+  }

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+
+{% block extra_head %} 
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <form action="{{ url_for('reviews.create_post') }}" method="post">
+        <input type="text" hidden id="book_id" name="book_id" value="{{ bookID }}">
+        <input type="text" hidden id="user_id" name="user_id" value="{{ current_user.id }}">
+
+        <div class="row">
+            <div class="col-md-12 d-flex flex-column">
+                <div class="mb-3">
+                    <label class="fs-3">Ваша оценка</label>
+                    <select class="form-select" name="score" id="score">
+                        <option value="5" selected>Отлично</option>
+                        <option value="4">Хорошо</option>
+                        <option value="3">Удовлетворительно</option>
+                        <option value="2">Неудовлетворительно</option>
+                        <option value="1">Плохо</option>
+                        <option value="0">Ужасно</option>
+                    </select>
+                    
+                </div>
+            </div>
+            <div class="col-md-12 d-flex flex-column">
+                <div class="mb-3 d-flex flex-column flex-grow-1">
+                    <label for="text_review" class="fs-3">Текст рецензии</label>
+                    <textarea id="desc" name="text_review"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="my-3 text-center">
+            <input type="submit" class="btn btn-dark" value="Сохранить">
+        </div>
+    </form>
+</div>
+<script src="{{ url_for('static', filename='EasyMDE.js')}}"></script>
+
+{% endblock %}

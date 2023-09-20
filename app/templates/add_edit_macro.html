@@ -1,0 +1,90 @@
+{% macro add_edit_form(setup=None, is_edit=False) %}
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<div class="container">
+    <h2 class="my-3 text-center text-uppercase font-weight-bold">{% if is_edit %} Редактирование настройки {% else %} Добавление настройки {% endif %}</h2>
+
+    <form method="POST" action="{% if is_edit %} {{ url_for('setups.edit_post', setupID=setup.id) }} {% else %} {{ url_for('setups.create_post') }} {% endif %}" enctype="multipart/form-data">
+        <div class="mb-3 row">
+        <div class="col-md-12 d-flex flex-column">
+            <div class="mb-3 d-flex flex-column flex-grow-1">
+                <label for="title">Название</label>
+                <input id="title" name="title" class="form-control" value="{{ setup.title or ''}}">
+            </div>
+        </div>
+            <div class="col-md-6 d-flex flex-column">
+                <div class="mb-3 d-flex flex-column flex-grow-1">
+                    <label for="title">Автомобиль</label>
+                    <select class="form-select" id="car_id" name="car_id">
+                        {% if cars %}
+                            {% for car in cars %}
+                                <option value="{{ car.id }}" {% if setup.car_id==car.id %} selected {% endif %}>{{ car.name }}</option>
+                            {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+            </div>
+
+            <div class="col-md-6 d-flex flex-column">
+                <div class="mb-3 d-flex flex-column flex-grow-1">
+                    <label for="title">Трасса</label>
+                    <select class="form-select" id="track_id" name="track_id">
+                        {% if tracks %}
+                            {% for track in tracks %}
+                                <option value="{{ track.id }}"  {% if setup.track_id==track.id %} selected {% endif %}>{{ track.name }}</option>
+                            {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+            </div>
+
+
+            <div class="row m-0 p-0">
+                <div class="col-md-6 d-flex flex-column">
+                    <div class="mb-3 d-flex flex-column flex-grow-1">
+                        <label for="title">Время круга</label>
+                        <input type="text" class="form-control" id="time" name="time" placeholder="2:18.1" value="{{ setup.int_to_time or "" }}">
+                    </div>
+                </div>
+            <div class="col-md-6 d-flex flex-column m-0 p-">
+                <div class="row m-0 p-0">
+
+                    <div class="col-6 mb-3 d-flex flex-column flex-grow-1">
+                        <label for="year_writing">Т воздуха</label>
+                        <input class="form-control flex-grow-1" type="number" name="condition_air" id="condition_air"  value="{{ setup.condition_air or '' }}">
+                        
+                    </div>
+                    <div class="col-6 mb-3 d-flex flex-column flex-grow-1">
+                        <label for="year_writing">Т трассы</label>
+                        <input class="form-control flex-grow-1" type="number" name="condition_track" id="condition_track"  value="{{ setup.condition_track or '' }}">
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+            <div class="col-md-12 d-flex flex-column">
+                <div class="mb-3 d-flex flex-column flex-grow-1">
+                    <label for="description">Описание</label>
+                    <textarea id="description" name="description">{{ setup.description or '' }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        {% if not is_edit %}
+        <div class="d-flex flex-column">
+            <div class="mb-3">
+                <label for="cover_img">Файл .json</label>
+                <input class="form-control" type="file" name="setup_file" id="setup_file">
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="mb-3 text-center">
+            <input type="submit" class="btn btn-dark" value="Сохранить">
+        </div>
+    </form>
+</div>
+<script src="{{ url_for('static', filename='EasyMDE.js')}}"></script>
+
+{% endmacro %}

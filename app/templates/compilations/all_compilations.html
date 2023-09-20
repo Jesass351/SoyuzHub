@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if compilations %}
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Название подборки</th>
+        <th scope="col">Количество книг</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for compilation in compilations %}
+      <tr>
+        <td scope="row">{{ compilation.title }}</td>
+        <td>{{ compilation.get_book_count() }}</td>
+        <td>
+          <a href="{{ url_for('compilations.show', compilation_id=compilation.id) }}" class="btn btn-primary">Просмотр</a>
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"  data-url="{{ url_for('compilations.delete_post', id = compilation.id) }}" data-title="{{ compilation.title }}" > Удалить </button>
+        </td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+  {% endif %}
+
+
+  <div class="d-flex justify-content-center">
+    <button type="button" class="btn btn-primary text-light my-3" data-bs-toggle="modal" data-bs-target="#createModal" data-url="{{ url_for('compilations.create_post') }}"> Добавить подборку </button>
+  </div>
+
+{% if current_user.is_authenticated %}
+
+  <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="createModalExample">Новая подборка</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            <input type="text" id="title" placeholder="Название" class="form-control" name="title">
+            <input type="text" name="user_id" hidden value="{{ current_user.id }}">
+            <input type="submit" class="d-none" id="submit-create">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+          <label for="submit-create" class="btn btn-primary mb-0">Добавить</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Удаление подборки</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Вы уверены, что хотите удалить подборку
+            "<span class="delete-title"></span>"
+            ?
+            <form action="" class="d-none" method="POST">
+              <input type="submit" id="submit-delete">
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+            <label for="submit-delete" class="btn btn-danger mb-0">Удалить</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <script src="{{ url_for('static', filename='delete.js')}}"></script>
+
+  <script src="{{ url_for('static', filename='create_compilation.js')}}"></script>
+
+{% endblock %}

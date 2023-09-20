@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center">
+<div class="container row mt-3 w-75">
+    <div class="col-md-6 my-3">
+        <label for="duration" class="">Продолжительность (минут)</label>
+        <input type="number" name="duration" id="duration" class="form-control" placeholder="20">
+    </div>
+
+    <div class="col-md-6 my-3">
+        <label for="consumption" class="">Расход</label>
+        <input type="number" name="consumption" id="consumption" class="form-control" placeholder="3.2">
+    </div>
+
+    <div class="col-md-6 my-3">
+        <label for="lapTimeMin" class="">Среднее время круга</label>
+        <div class="d-flex">
+            <input type="number" id="lapTimeMin" min="0" class="form-control me-3" style="max-width: 100px;" placeholder="1">
+            <input type="number" id="lapTimeSec" min="0" max="59" class="form-control"  style="max-width: 100px;" placeholder="47">
+        </div>
+
+    </div>
+
+    <div class="col-md-6 my-3">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="isZeroLap">
+            <label class="form-check-label" for="zeroLap">Прогревочный круг</label>
+        </div>
+    </div>
+    <div class="mt-4">
+        <p class="fs-4 fw-bold">Рекомендуется топлива: <span id="totalFuel" class="text-info">0</span></p>
+        <p class="fs-5 fw-bold">Количество кругов: <span id="lapCount" class="text-danger">0</span></p>
+        <p class="fs-5 fw-bold d-none" id="zeroLapFuelP">В том числе <span id="zeroLapFuel" class="text-primary">0</span> литров на прогревочный круг</p>
+
+    </div>
+</div>
+</div>
+
+<script src="{{ url_for('static', filename='fuel_calc.js') }}"></script>
+{% endblock %}

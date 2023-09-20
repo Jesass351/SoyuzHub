@@ -1,0 +1,33 @@
+{% macro show_setup(setup, extra_buttons=False) %}
+<script src="https://kit.fontawesome.com/9185e81767.js" crossorigin="anonymous"></script>
+    <div class="col-sm-12 col-md-4">
+      {% set car_info = setup.get_car(true) %}
+      <div class="setup-card" style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.8)), url({{ url_for('static', filename=car_info[1]) }});">
+        <div class="card-carname">
+          {{ setup.get_car() }}
+        </div>
+        <div class="card-trackname">
+          {{ setup.get_track() }}
+        </div>
+        <div class="card-title">
+          {{ setup.title|truncate(10) }}
+        </div>
+        <div class="card-time">
+          <p>{{ setup.int_to_time }}</p>
+        </div>
+        <div class="card-created-at">
+          <p>{{ setup.created_at.strftime('%d.%m.%Y') }}</p>
+        </div>
+        <div class="card-author">
+          <p>{{ setup.get_author_login() }}</p>
+        </div>
+        <span class="card-likes"><i class="fa-solid fa-thumbs-up"></i> {{ setup.get_action_count('2') }}</span>
+        <span class="card-downloads"><i class="fa-solid fa-download"></i> {{ setup.get_action_count('1') }}</span>
+        <a class="card-link" target="_blank" href="{{ url_for('setups.show', setupID=setup.id) }}" ></a>
+      </div>
+      {% if extra_buttons %}
+      <a href="{{ url_for('setups.edit', setupID=setup.id) }}" class="btn btn-secondary w-100">Редактировать</a>
+      <button type="button" class="btn btn-danger mt-1 mb-3 w-100" data-bs-toggle="modal" data-bs-target="#deleteModal" data-url="{{ url_for('setups.delete_post', setupID=setup.id) }}" data-title="{{ setup.title }}" > Удалить </button>
+      {% endif %}
+  </div>
+{% endmacro %}

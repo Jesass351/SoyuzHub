@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+{% block extra_head %}
+<title>{{ setup.title }}</title>
+
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/main.css') }}">
+
+
+<script src="https://kit.fontawesome.com/9185e81767.js" crossorigin="anonymous"></script>
+
+{% if setup %}
+<div class="p-0 m-0">
+  {% set car_info = setup.get_car(true) %}
+  <div class="setup-header" style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.8)), url({{ url_for('static', filename=car_info[1]) }});">
+    <div class="setup-carname">
+      {{ setup.get_car() }}
+    </div>
+    <div class="setup-trackname">
+      {{ setup.get_track() }}
+    </div>
+    <div class="setup-created-at">
+      {{ setup.created_at.strftime('%d.%m.%Y %H:%M') }}
+    </div>
+    <div class="setup-likes">
+      {% if current_user.is_authenticated %}
+        {% if current_user.check_already_action(setup.id, 2) %}
+          <a href="{{ url_for('setups.like', setupID=setup.id) }}" class="text-decoration-none text-light"><i class="fa-regular fa-thumbs-up text-danger"></i> {{ setup.get_action_count('2') }}</a>
+        {% else %}
+          <span><i class="fa-solid fa-thumbs-up text-danger"></i> {{ setup.get_action_count('2') }}</span>
+        {% endif %}
+        {% else %}
+        <span><i class="fa-solid fa-thumbs-up text-danger"></i> {{ setup.get_action_count('2') }}</span>
+      {% endif %}
+    </div>
+    <div class="setup-downloads">
+      <i class="fa-solid fa-download text-primary"></i> {{ setup.get_action_count('1') }}
+    </div>
+  </div>
+</div>
+<div class="container mt-2">
+
+          <h1>{{ setup.title }}</h1>
+          <h3 class="mt-3 text-secondary">{{ setup.description | safe }}</h3> 
+
+          <div class="row mt-4">
+            <div class="col-md-6 d-flex justify-content-center">
+              <div>
+                <p class="fs-4 fw-bold"><i class="fa-solid fa-stopwatch"></i>{{ setup.int_to_time }}</p>
+              </div>
+            </div>
+            <div class="col-md-6 d-flex justify-content-center">
+              <span class="me-3"></span>
+              <p class="fs-5"><i class="fa-solid fa-temperature-quarter"></i> {{ setup.condition_air }}℃&nbsp;&nbsp;{{ setup.condition_air }}℃</p>
+              
+            </div>
+          </div>
+
+    <div class="w-100 my-4 text-center">
+        <a href="{{ url_for('setups.show',setupID=setup.id, download_json=True) }}" class="btn btn-primary w-75 p-3">Скачать</a>
+
+    </div>
+</div>
+
+<div class="container mt-3">
+    <div class="row d-flex justify-content-center">
+        <h3 class="text-center">Шины</h3>
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <span class="fs-4 fw-bold">Передняя левая</span>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-light">Давление: {{ general_car_data.min_tire_pressure + file.basicSetup.tyres.tyrePressure[0] / 10 }} PSI</li>
+                  <li class="list-group-item bg-light">Схождение: {{ car_data.toe_min_front + file.basicSetup.alignment.toe[0] * 0.1|round }} °</li>
+                  <li class="list-group-item bg-light">Развал: {{ car_data.camber_min_front + file.basicSetup.alignment.camber[0] * 0.1}} °</li>
+                  <li class="list-group-item bg-light">Кастер: {{ car_data.caster_min + file.basicSetup.alignment.casterLF * 0.1}} °</li>
+                </ul>
+              </div>
+        </div>
+
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <span class="fs-4 fw-bold">Передняя правая</span>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-light">Давление: {{ general_car_data.min_tire_pressure + file.basicSetup.tyres.tyrePressure[1] / 10 }} PSI</li>
+                  <li class="list-group-item bg-light">Схождение: {{ car_data.toe_min_front + file.basicSetup.alignment.toe[1] * 0.1|round }} °</li>
+                  <li class="list-group-item bg-light">Развал: {{ car_data.camber_min_front + file.basicSetup.alignment.camber[1] * 0.1}} °</li>
+                  <li class="list-group-item bg-light">Кастер: {{ car_data.caster_min + file.basicSetup.alignment.casterRF * 0.1}} °</li>
+
+                </ul>
+              </div>
+        </div>
+
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <span class="fs-4 fw-bold">Задняя левая</span>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-light">Давление: {{ general_car_data.min_tire_pressure + file.basicSetup.tyres.tyrePressure[2] / 10 }} PSI</li>
+                  <li class="list-group-item bg-light">Схождение: {{ (car_data.toe_min_rear + file.basicSetup.alignment.toe[2] * 0.1)|round(2) }} °</li>
+                  <li class="list-group-item bg-light">Развал: {{ car_data.camber_min_rear + file.basicSetup.alignment.camber[2] * 0.1 }} °</li>
+
+                </ul>
+              </div>
+        </div>
+
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <span class="fs-4 fw-bold">Задняя правая</span>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-light">Давление: {{ general_car_data.min_tire_pressure + file.basicSetup.tyres.tyrePressure[3] / 10 }}  PSI</li>
+                  <li class="list-group-item bg-light">Схождение: {{ (car_data.toe_min_rear + file.basicSetup.alignment.toe[3] * 0.1)|round(2) }} °</li>
+                  <li class="list-group-item bg-light">Развал: {{ car_data.camber_min_rear + file.basicSetup.alignment.camber[3] * 0.1}} °</li>
+
+                </ul>
+              </div>
+        </div>
+    </div>
+
+    <div class="row d-flex justify-content-center mt-3">
+        <h3 class="text-center">Электроника</h3>
+
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-light">TC1: {{ file.basicSetup.electronics.tC1 }}</li>
+                  <li class="list-group-item bg-light">TC2: {{ file.basicSetup.electronics.tC2 }}</li>
+                </ul>
+              </div>
+        </div>
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-light">АБС: {{ file.basicSetup.electronics.abs }}</li>
+                  <li class="list-group-item bg-light">ECU: {{ file.basicSetup.electronics.eCUMap }}</li>
+                </ul>
+              </div>
+        </div>
+    </div>
+
+    <div class="row d-flex justify-content-center mt-3">
+        <h3 class="text-center">Механика</h3>
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-light">Front Anti-Roll Bar: {{ file.advancedSetup.mechanicalBalance.aRBFront }}</li>
+                  <li class="list-group-item bg-light">Steer Ratio: {{ car_data.max_steer_ration - file.basicSetup.alignment.steerRatio }}</li>
+                </ul>
+              </div>
+        </div>
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-light">BB: {{ file.advancedSetup.mechanicalBalance.brakeBias }}%</li>
+                  <li class="list-group-item bg-light">BP: {{ car_data.min_bp + file.advancedSetup.mechanicalBalance.brakeTorque }}%</li>
+                </ul>
+              </div>
+        </div>
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <span class="fs-4 fw-bold">Передняя левая</span>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-light">Wheel Rate: {{ car_data.wheel_rate[file.advancedSetup.mechanicalBalance.wheelRate[0]] }} Nm</li>
+                    <li class="list-group-item bg-light">Bumpstop Rate: {{ car_data.bump_stop_up[file.advancedSetup.mechanicalBalance.bumpStopRateUp[0]] }} N</li>
+                    <li class="list-group-item bg-light">Bumpstop Range: {{ file.advancedSetup.mechanicalBalance.bumpStopWindow[0] }} </li>
+                </ul>
+              </div>
+        </div>
+
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <span class="fs-4 fw-bold">Передняя правая</span>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-light">Wheel Rate: {{ car_data.wheel_rate[file.advancedSetup.mechanicalBalance.wheelRate[1]] }} Nm</li>
+                    <li class="list-group-item bg-light">Bumpstop Rate: {{ car_data.bump_stop_up[file.advancedSetup.mechanicalBalance.bumpStopRateUp[1]] }} N</li>
+                    <li class="list-group-item bg-light">Bumpstop Range: {{ file.advancedSetup.mechanicalBalance.bumpStopWindow[1] }} </li>
+                </ul>
+              </div>
+        </div>
+
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <span class="fs-4 fw-bold">Задняя левая</span>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-light">Wheel Rate: {{ car_data.wheel_rate[file.advancedSetup.mechanicalBalance.wheelRate[2]] }} Nm</li>
+                    <li class="list-group-item bg-light">Bumpstop Rate: {{ car_data.bump_stop_up[file.advancedSetup.mechanicalBalance.bumpStopRateUp[2]] }} N</li>
+                    <li class="list-group-item bg-light">Bumpstop Range: {{ file.advancedSetup.mechanicalBalance.bumpStopWindow[2] }} </li>
+                </ul>
+              </div>
+        </div>
+
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <span class="fs-4 fw-bold">Задняя правая</span>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-light">Wheel Rate: {{ car_data.wheel_rate[file.advancedSetup.mechanicalBalance.wheelRate[3]] }} Nm</li>
+                    <li class="list-group-item bg-light">Bumpstop Rate: {{ car_data.bump_stop_up[file.advancedSetup.mechanicalBalance.bumpStopRateUp[3]] }} N</li>
+                    <li class="list-group-item bg-light">Bumpstop Range: {{ file.advancedSetup.mechanicalBalance.bumpStopWindow[3] }} </li>
+                </ul>
+              </div>
+        </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6 border border-1 rounded-2 border-dark p-2 m-2">
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-light">Rear Anti-Roll Bar: {{ file.advancedSetup.mechanicalBalance.aRBRear }}</li>
+                    <li class="list-group-item bg-light">Preload Differential: {{ car_data.preload[file.advancedSetup.drivetrain.preload] }} Nm</li>
+                </ul>
+                </div>
+        </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <div class="card">
+                <span class="fs-4 fw-bold">Dampers Передняя левая</span>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-light">Bump: {{ file.advancedSetup.dampers.bumpSlow[0] }}</li>
+                  <li class="list-group-item bg-light">Fast Bump: {{ file.advancedSetup.dampers.bumpFast[0] }}</li>
+                  <li class="list-group-item bg-light">Rebound: {{ file.advancedSetup.dampers.reboundSlow[0] }}</li>
+                  <li class="list-group-item bg-light">Fast Rebound: {{ file.advancedSetup.dampers.reboundFast[0] }}</li>
+                </ul>
+              </div>
+        </div>
+
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <div class="card">
+                <span class="fs-4 fw-bold">Dampers Передняя правая</span>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-light">Bump: {{ file.advancedSetup.dampers.bumpSlow[0] }}</li>
+                  <li class="list-group-item bg-light">Fast Bump: {{ file.advancedSetup.dampers.bumpFast[0] }}</li>
+                  <li class="list-group-item bg-light">Rebound: {{ file.advancedSetup.dampers.reboundSlow[0] }}</li>
+                  <li class="list-group-item bg-light">Fast Rebound: {{ file.advancedSetup.dampers.reboundFast[0] }}</li>
+                </ul>
+              </div>
+        </div>
+
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <div class="card">
+                <span class="fs-4 fw-bold">Dampers Задняя левая</span>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-light">Bump: {{ file.advancedSetup.dampers.bumpSlow[0] }}</li>
+                  <li class="list-group-item bg-light">Fast Bump: {{ file.advancedSetup.dampers.bumpFast[0] }}</li>
+                  <li class="list-group-item bg-light">Rebound: {{ file.advancedSetup.dampers.reboundSlow[0] }}</li>
+                  <li class="list-group-item bg-light">Fast Rebound: {{ file.advancedSetup.dampers.reboundFast[0] }}</li>
+                </ul>
+              </div>
+        </div>
+
+        <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+            <div class="card">
+                <span class="fs-4 fw-bold">Dampers Задняя правая</span>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-light">Bump: {{ file.advancedSetup.dampers.bumpSlow[0] }}</li>
+                  <li class="list-group-item bg-light">Fast Bump: {{ file.advancedSetup.dampers.bumpFast[0] }}</li>
+                  <li class="list-group-item bg-light">Rebound: {{ file.advancedSetup.dampers.reboundSlow[0] }}</li>
+                  <li class="list-group-item bg-light">Fast Rebound: {{ file.advancedSetup.dampers.reboundFast[0] }}</li>
+                </ul>
+              </div>
+        </div>
+    </div>
+
+        <div class="row d-flex justify-content-center mt-3">
+            <h3 class="text-center">Аэродинамика</h3>
+            <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+                <div class="card">
+                    <span class="fs-4 fw-bold">Спереди</span>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item bg-light">Высота: {{ file.advancedSetup.aeroBalance.rideHeight[0] }}</li>
+                      <li class="list-group-item bg-light">Сплитер: {{ file.advancedSetup.aeroBalance.splitter }}</li>
+                      <li class="list-group-item bg-light">Заслонки тормозов: {{ file.advancedSetup.aeroBalance.brakeDuct[0] }}</li>
+                    </ul>
+                  </div>
+            </div>
+
+            <div class="col-md-5 border border-1 rounded-2 border-dark p-2 m-2">
+                <div class="card">
+                    <span class="fs-4 fw-bold">Сзади</span>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item bg-light">Высота: {{ file.advancedSetup.aeroBalance.rideHeight[2] }}</li>
+                      <li class="list-group-item bg-light">Сплитер: {{ file.advancedSetup.aeroBalance.rearWing }}</li>
+                      <li class="list-group-item bg-light">Заслонки тормозов: {{ file.advancedSetup.aeroBalance.brakeDuct[1] }}</li>
+                    </ul>
+                  </div>
+            </div>
+        </div>
+    {{ file }}
+</div>
+
+
+
+{% endif %}
+
+
+{% endblock %}
